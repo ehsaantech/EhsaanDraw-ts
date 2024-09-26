@@ -1,0 +1,87 @@
+.github-auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #000;
+  }
+  
+  .github-auth-card {
+    max-width: 300px;
+    max-height: 300px;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 8px 12px rgba(0.1, 0.1, 0.2, 0.4);
+    overflow: hidden;
+  }
+  
+  .github-auth-content {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .github-auth-title {
+    margin: 0 0 20px;
+    font-size: 24px;
+    font-family: 'Poppins';
+    font-weight: bold;
+  }
+  
+  .github-auth-image {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 40px;
+    margin-top: 30px;
+  }
+  
+  .github-auth-button {
+    background: #000000;
+    border: none;
+    color: #fff;
+    width: 100%;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Poppins';
+  }
+  .github-auth-button {
+    background: #000000;
+    border: none;
+    color: #fff;
+    width: 100%;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Poppins';
+  }
+  .github-auth-button {
+    background: #000000;
+    border: none;
+    color: #fff;
+    width: 100%;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Poppins';
+  }
+  .github-auth-loading {
+    background: #000000;
+    border: none;
+    color: #fff;
+    width: 90%;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Poppins';
+  }
+  

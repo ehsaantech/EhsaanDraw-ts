@@ -1,7 +1,24 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "compilerOptions": {
+    "target": "es6",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true, // Overall strict mode
+    "noImplicitAny": false, // Allow 'any' type without warnings
+    "strictNullChecks": false, // Disable strict null checks (optional)
+    "strictFunctionTypes": false, // Disable strict function types (optional)
+    "strictBindCallApply": true, // Keep this strict (optional)
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react",
+    "typeRoots": ["./node_modules/@types", "./src/@types"],
+    "checkJs": true
+  },
+  "include": ["src/**/*"]
 }
