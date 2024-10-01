@@ -1,0 +1,49 @@
+/* index.css */
+
+/* General Button Styles */
+.button {
+    border-radius: 5px;
+    width: 50px;
+    height: 37px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    outline: none;
+    margin-left: 10px;
+  }
+  
+  /* Light Theme Button Styles */
+  .button-light {
+    background: #fff;
+    border: 3px solid black;
+    color: #000;
+  }
+  
+  /* Dark Theme Button Styles */
+  .button-dark {
+    background: #232329;
+    border: 3px solid #232329;
+    color: #E3E3E8;
+  }
+  
+  /* Save Button Specific Styles */
+  .save-button {
+    width: 105px;
+  }
+  
+  .save-button-light {
+    background: #000;
+    border: 3px solid #232329;
+    color: #fff;
+  }
+  
+  .save-button-dark {
+    background: #232329;
+    border: 3px solid #232329;
+    color: #E3E3E8;
+  }
+  

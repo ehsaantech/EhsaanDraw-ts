@@ -1,0 +1,150 @@
+.landing-screen {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+  
+  .header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    height: 4rem;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: 0.75rem 1rem;
+  }
+  
+  .header-title {
+    color: inherit;
+    font-size: 3rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin: 0;
+  }
+  
+  .header-controls {
+    position: absolute;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-input {
+    width: 250px;
+    padding: 8px;
+    height: 24px;
+    font-size: 16px;
+    border-radius: 8px;
+    background: inherit;
+    color: inherit;
+    border: 2px solid;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    margin-right: 5px;
+  }
+  
+  .search-icon,
+  .add-icon {
+    cursor: pointer;
+    margin-left: 15px;
+  }
+  
+  .logout-button {
+    width: 100px;
+    height: 37px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    background: inherit;
+    color: inherit;
+    margin-left: 1rem;
+  }
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 60;
+  }
+  
+  .modal-content {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  .modal-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .document-name-input {
+    padding: 8px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    margin-bottom: 10px;
+  }
+  
+  .error {
+    border-color: red;
+  }
+  
+  .error-message {
+    color: red;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  
+  .create-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: "10px";
+  }
+  
+  .create-button:disabled {
+    background-color: #ccc;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+  }
+  
+  .content {
+    padding: 1rem;
+    flex: 1;
+  }
+  
+  .no-documents-message {
+    text-align: center;
+  }
+  

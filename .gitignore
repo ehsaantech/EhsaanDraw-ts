@@ -1,0 +1,21 @@
+# Node modules
+node_modules/
+
+# Ignore React JSX runtime and React DOM
+react_jsx-runtime.jsx
+react-dom/
+
+# Ignore specific files
+_metadata.json
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Build output
+dist
+build
+
+# Environment variables
+.env
