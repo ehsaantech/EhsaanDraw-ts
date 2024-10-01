@@ -1,17 +1,16 @@
 import { useParams } from "react-router-dom";
 import {
-  collection,
-  getDocs,
-  doc,
   addDoc,
+  collection,
+  doc,
+  getDocs,
   updateDoc,
 } from "firebase/firestore";
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import EhsaanDrawScreen from "../Navbar";
 import { database } from "../../../firebaseConfig";
 import { useGithub } from "../../githubContext";
-import React from "react";
 
 interface SceneData {
   id: string;
@@ -22,14 +21,12 @@ const SketchingPad: React.FC = () => {
   const [updatedScenes, setUpdatedScenes] = useState<SceneData[]>([]);
   const { id } = useParams<{ id: string }>();
   const { githubId } = useGithub();
-  const [collectionUrl, setCollectionUrl] = useState<string | null>(null);
-  const [isSaving, setIsSaving] = useState<boolean>(false); 
+  const [isSaving, setIsSaving] = useState<boolean>(false);
 
   useEffect(() => {
     const getData = async () => {
       try {
         const appdataRef = collection(database, "users", `${githubId}/scenes`);
-        setCollectionUrl(appdataRef.path);
         const docSnap = await getDocs(appdataRef);
         const scenesData: SceneData[] = docSnap.docs.map((doc) => ({
           ...doc.data(),
@@ -44,29 +41,52 @@ const SketchingPad: React.FC = () => {
         console.error("Error fetching data:", error);
       }
     };
-    getData();
-    // eslint-disable-next-line
-  }, [githubId,id]);
+    getData().then();
+  }, [githubId, id]);
+
+  const sanitizeData = (obj) => {
+    if (Array.isArray(obj)) {
+      // If it's a nested array, convert it to a string
+      return obj.map((item) =>
+        Array.isArray(item) ? JSON.stringify(item) : sanitizeData(item),
+      );
+    } else if (obj && typeof obj === "object") {
+      return Object.fromEntries(
+        Object.entries(obj)
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          .filter(([_, value]) => value !== undefined) // Remove undefined
+          .map(([key, value]) => [key, sanitizeData(value)]), // Recursively sanitize values
+      );
+    }
+    return obj;
+  };
 
   const shareScenesData = async () => {
     try {
       if (!githubId) {
-        throw new Error("User ID is not available.");
+        toast.error("User ID is not available.");
+        return;
       }
       if (!updatedScenes || updatedScenes.length === 0) {
-        throw new Error("Scenes data is empty or not initialized.");
+        toast.error("Scenes data is empty or not initialized.");
+        return;
+      }
+
+      if (!id) {
+        toast.error("Scene ID is not available.");
+        return;
       }
 
       const appdataRef = collection(database, "share");
+      const sanitizedScenes = sanitizeData(updatedScenes);
       const shareDoc = {
         userId: githubId,
-        scenesData: updatedScenes,
-        sceneId: id, 
+        scenesData: sanitizedScenes,
+        sceneId: id,
       };
 
       const docRef = await addDoc(appdataRef, shareDoc);
       const shareableLink = `${window.location.origin}/shared/${docRef.id}`;
-      
 
       await navigator.clipboard.writeText(shareableLink);
       toast.success("Shareable link copied to clipboard!");
@@ -76,19 +96,24 @@ const SketchingPad: React.FC = () => {
     }
   };
 
-  const updateData = async (elements: any[]) => { // Adjust the type as necessary
+  const updateData = async (elements: any[]): Promise<boolean> => {
     if (!id) {
       toast.error("Please select a document or create a new one.");
       return false;
     }
-    setIsSaving(true); 
+
+    setIsSaving(true);
     try {
       const updateValue = doc(database, "users", `${githubId}/scenes`, id);
       await updateDoc(updateValue, { scenes1: JSON.stringify(elements) });
+
       setUpdatedScenes(elements);
+
+      return true;
     } catch (error) {
       console.error("Error saving sketch:", error);
       toast.error("Failed to save sketch.");
+      return false;
     } finally {
       setIsSaving(false);
     }
@@ -104,6 +129,6 @@ const SketchingPad: React.FC = () => {
       />
     </div>
   );
-}
+};
 
 export default SketchingPad;
