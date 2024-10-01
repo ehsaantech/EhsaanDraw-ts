@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { doc, getDoc, Firestore } from 'firebase/firestore';
 import toast from "react-hot-toast";
 import EhsaanDrawScreen from '../Navbar';
-
+import React from 'react';
 interface SceneData {
-  id: string;
+  id: string; // Adjust properties as per your actual SceneData structure
 }
 
 interface SharedPageProps {
@@ -17,12 +17,12 @@ const SharedPage: React.FC<SharedPageProps> = ({ database }) => {
   const { shareId } = useParams<{ shareId: string }>();
 
   useEffect(() => {
-    if (!shareId) {
-      toast.error("No share ID provided.");
-      return;
-    }
-
     const fetchSharedData = async () => {
+      if (!shareId) {
+        toast.error("No share ID provided.");
+        return;
+      }
+
       try {
         const sharedDocRef = doc(database, "share", shareId);
         const sharedDocSnap = await getDoc(sharedDocRef);
@@ -37,7 +37,7 @@ const SharedPage: React.FC<SharedPageProps> = ({ database }) => {
         toast.error("Failed to fetch shared data.");
       }
     };
-    
+
     fetchSharedData();
   }, [shareId, database]);
 

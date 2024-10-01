@@ -1,32 +1,33 @@
 import { useParams } from "react-router-dom";
-import { collection, getDocs, doc, addDoc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  doc,
+  addDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { useState, useEffect } from "react";
-import { useGithub } from "../../githubContext";
 import toast from "react-hot-toast";
-import React from "react";
 import EhsaanDrawScreen from "../Navbar";
 import { database } from "../../../firebaseConfig";
+import { useGithub } from "../../githubContext";
+import React from "react";
 
 interface SceneData {
   id: string;
-  scenes1: string;
+  scenes1: string; // Adjust according to your actual data structure
 }
 
-function SketchingPad() {
-  const [updatedScenes, setUpdatedScenes] = useState<string[]>([]);
-  const { id } = useParams<{ id: string }>(); // Extract 'id' from URL params
+const SketchingPad: React.FC = () => {
+  const [updatedScenes, setUpdatedScenes] = useState<SceneData[]>([]);
+  const { id } = useParams<{ id: string }>();
   const { githubId } = useGithub();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [collectionUrl, setCollectionUrl] = useState<string | null>(null);
-  const [isSaving, setIsSaving] = useState<boolean>(false); // Add state for saving status
+  const [isSaving, setIsSaving] = useState<boolean>(false); 
 
   useEffect(() => {
     const getData = async () => {
       try {
-        if (!githubId) {
-          throw new Error("Github ID is not available.");
-        }
-
         const appdataRef = collection(database, "users", `${githubId}/scenes`);
         setCollectionUrl(appdataRef.path);
         const docSnap = await getDocs(appdataRef);
@@ -45,7 +46,7 @@ function SketchingPad() {
     };
     getData();
     // eslint-disable-next-line
-  }, [githubId, id]);
+  }, [githubId,id]);
 
   const shareScenesData = async () => {
     try {
@@ -57,18 +58,16 @@ function SketchingPad() {
       }
 
       const appdataRef = collection(database, "share");
-      const newShareDoc = {
+      const shareDoc = {
         userId: githubId,
         scenesData: updatedScenes,
-        sceneId: id,
+        sceneId: id, 
       };
 
-      console.log("Data to share:", newShareDoc);
-
-      const docRef = await addDoc(appdataRef, newShareDoc);
+      const docRef = await addDoc(appdataRef, shareDoc);
       const shareableLink = `${window.location.origin}/shared/${docRef.id}`;
-      console.log("Shareable Link: ", shareableLink);
       
+
       await navigator.clipboard.writeText(shareableLink);
       toast.success("Shareable link copied to clipboard!");
     } catch (error) {
@@ -77,8 +76,7 @@ function SketchingPad() {
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const updateData = async (elements: any[]) => {
+  const updateData = async (elements: any[]) => { // Adjust the type as necessary
     if (!id) {
       toast.error("Please select a document or create a new one.");
       return false;
@@ -92,17 +90,17 @@ function SketchingPad() {
       console.error("Error saving sketch:", error);
       toast.error("Failed to save sketch.");
     } finally {
-      setIsSaving(false); 
+      setIsSaving(false);
     }
   };
-  
+
   return (
     <div>
-      <EhsaanDrawScreen 
-        updateData={updateData} 
-        scenes={updatedScenes} 
-        shareScenesData={shareScenesData} 
-        isSaving={isSaving} 
+      <EhsaanDrawScreen
+        updateData={updateData}
+        scenes={updatedScenes}
+        shareScenesData={shareScenesData}
+        isSaving={isSaving}
       />
     </div>
   );
