@@ -7,7 +7,9 @@ import { ThemeContext } from "../../themeContext";
 import "./index.css"; // Import the CSS file
 
 interface EhsaanDrawScreenProps {
-  updateData?: (elements: any[]) => boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  updateData?: (elements: any) => Promise<boolean>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   scenes: any[];
   shareScenesData?: () => void;
   readOnly?: boolean;

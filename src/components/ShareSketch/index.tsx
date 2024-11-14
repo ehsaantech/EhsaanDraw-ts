@@ -18,6 +18,7 @@ const SharedPage: React.FC<SharedPageProps> = ({ database }) => {
 
   useEffect(() => {
     // Function to recursively parse any stringifies arrays back into arrays
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const parseData = (obj: any): any => {
       if (Array.isArray(obj)) {
         return obj.map((item) =>
