@@ -96,6 +96,7 @@ const SketchingPad: React.FC = () => {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateData = async (elements: any[]): Promise<boolean> => {
     if (!id) {
       toast.error("Please select a document or create a new one.");

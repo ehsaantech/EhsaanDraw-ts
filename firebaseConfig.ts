@@ -10,8 +10,9 @@ import {getAuth , GithubAuthProvider} from "firebase/auth"
 const firebaseConfig = {
   apiKey: "AIzaSyC-qqsJTlxTq65K2ToL6FQdYItwtA2S1nI",
   authDomain: "ehsaandraw.firebaseapp.com",
+  databaseURL: "https://ehsaandraw-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "ehsaandraw",
-  storageBucket: "ehsaandraw.appspot.com",
+  storageBucket: "ehsaandraw.firebasestorage.app",
   messagingSenderId: "324689529899",
   appId: "1:324689529899:web:1182f42f688d6f4823ae6e"
 };
