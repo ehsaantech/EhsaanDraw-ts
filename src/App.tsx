@@ -17,7 +17,7 @@ const GithubAuth = React.lazy(() =>
   import("./components/GitHubAuth/index")
 );
 const EditPage = React.lazy(() =>
-  import("./components/EhsaanDrawSketch/index")
+  import("./components/EhsaanSketchScreen/index")
 );
 
 function App() {

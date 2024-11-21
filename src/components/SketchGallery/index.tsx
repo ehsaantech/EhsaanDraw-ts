@@ -10,7 +10,7 @@ import {
 } from "firebase/firestore";
 import CardList from "../CardList";
 import { useNavigate, useLocation } from "react-router-dom";
-import EditPage from "../EhsaanDrawSketch";
+import EditPage from "../EhsaanSketchScreen";
 import { useGithub } from "../../githubContext";
 import toast from "react-hot-toast";
 import { SquarePlus, Search } from "lucide-react";
@@ -48,7 +48,7 @@ const SketchGallery: React.FC = () => {
   };
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event:any) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpen(false);
       }
@@ -155,9 +155,9 @@ const SketchGallery: React.FC = () => {
     await deleteDoc(deleteValue);
   };
 
-  const handleEdit = async (id: string, userName: string, scenes: any[]) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleEdit = async (id: string) => {
     let scene: any[] = [];
-    
     navigate(`/edit/${id}`);
     setScenes(scene);
     setId(id);
@@ -229,11 +229,10 @@ const SketchGallery: React.FC = () => {
             strokeWidth={"1.3px"}
             style={{ marginLeft: "15px", cursor: "pointer" }}
           />
-          {/* Profile Image that toggles the dropdown */}
           <div style={{ position: 'relative', marginLeft: '15px', marginTop:'3px' }} ref={dropdownRef}>
       {/* Profile Image that toggles the dropdown */}
       <img
-        src={photoUrl} // Fallback image if no photoUrl
+        src={photoUrl} 
         alt=""
         onClick={toggleDropdown}
         style={{
