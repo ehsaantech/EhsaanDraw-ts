@@ -19,18 +19,18 @@ import { ThemeContext } from "../../themeContext";
 import '../../App.css'
 import { useRef } from "react";
 import { LogOut } from 'lucide-react';
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../../../firebaseConfig";
 
 const SketchGallery: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>("");
-  const [scenes, setScenes] = useState<any[]>([]);
-  const [values, setValues] = useState<any[]>([]);
-  const [filteredValues, setFilteredValues] = useState<any[]>([]);
+  const [values, setValues] = useState([]);
+  const [filteredValues, setFilteredValues] = useState([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [id, setId] = useState<string>("");
-  const [deleteValue, setDeleteValue] = useState<any>(""); 
   const [error, setError] = useState<boolean>(false);
   const [openSearch, setOpenSearch] = useState<boolean>(false);
   const [isCreating, setIsCreating] = useState<boolean>(false);
@@ -48,7 +48,7 @@ const SketchGallery: React.FC = () => {
   };
 
   useEffect(() => {
-    const handleClickOutside = (event:any) => {
+    const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpen(false);
       }
@@ -97,6 +97,7 @@ const SketchGallery: React.FC = () => {
       setError(true);
       return;
     }
+    logEvent(analytics,"Create SketchBoard")
 
     setIsCreating(true);
 
@@ -110,16 +111,15 @@ const SketchGallery: React.FC = () => {
       };
 
       const createdSketchId = await addDoc(sketchCollection, addSketch);
-      toast.success("Document created successfully");
+      toast.success("Sketch card created successfully");
       setError(false);
       setId(createdSketchId.id);
-      setScenes([]);
       setUserName("");
       handleClose();
       navigate(`/edit/${createdSketchId.id}`);
     } catch (error) {
-      console.error("Error creating document:", error);
-      toast.error("Failed to create document.");
+      console.error("Error creating sketch:", error);
+      toast.error("Failed to create sketch.");
     } finally {
       setIsCreating(false);
     }
@@ -139,7 +139,7 @@ const SketchGallery: React.FC = () => {
       setFilteredValues(fetchedValues);
     };
     getData();
-  }, [id, deleteValue]);
+  }, [id]);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -150,16 +150,24 @@ const SketchGallery: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    const deleteValue = doc(database, "users", `${githubId}/scenes`, id);
-    setDeleteValue(deleteValue);
-    await deleteDoc(deleteValue);
+    const deleteDocRef = doc(database, "users", `${githubId}/scenes`, id);
+    logEvent(analytics, "Delete SketchBoard");
+
+    try {
+      await deleteDoc(deleteDocRef);
+      toast.success("Sketch deleted successfully!");
+
+      // Update local state after deletion
+      setValues((prevValues) => prevValues.filter((item) => item.id !== id));
+      setFilteredValues((prevValues) => prevValues.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Error deleting document:", error);
+      toast.error("Failed to delete sketch.");
+    }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleEdit = async (id: string) => {
-    let scene: any[] = [];
+  const handleEdit = async (id) => {
     navigate(`/edit/${id}`);
-    setScenes(scene);
     setId(id);
   };
 
@@ -198,7 +206,7 @@ const SketchGallery: React.FC = () => {
         >
           {openSearch && (
             <input
-              placeholder="Search Document"
+              placeholder="Search Sketch..."
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
               style={{
@@ -352,7 +360,7 @@ const SketchGallery: React.FC = () => {
                 textAlign: "center",
               }}
             >
-              Document Details
+              Sketch Details
             </h2>
 
             {/* Content */}
@@ -363,7 +371,7 @@ const SketchGallery: React.FC = () => {
               >
                 <input
                   type="text"
-                  placeholder="Document Name"
+                  placeholder="Sketch Name"
                   value={userName}
                   maxLength={40}
                   onKeyDown={(e) => {
@@ -398,7 +406,7 @@ const SketchGallery: React.FC = () => {
                       fontFamily:"sans-serif"
                     }}
                   >
-                    Document name is required
+                    Sketch name is required
                   </p>
                 )}
               </div>
@@ -465,9 +473,11 @@ const SketchGallery: React.FC = () => {
             handleDelete={handleDelete}
           />
         ) : (
-          <p style={{ color: theme === "dark" ? "#eee" : "#000",fontFamily:"sans-serif",fontSize:"20px" }}>
-            No documents created so far.
-          </p>
+          <div className="empty-message-container flex items-center justify-center">
+    <p className="empty-message-text">
+      No sketch created so far.
+    </p>
+  </div>
         )}
       </div>
     </div>

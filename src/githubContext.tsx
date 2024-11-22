@@ -2,6 +2,8 @@ import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { signInWithPopup } from 'firebase/auth';
 import { auth, provider } from '../firebaseConfig';
 import { getAdditionalUserInfo } from 'firebase/auth';
+import { logEvent } from 'firebase/analytics';
+import { analytics } from '../firebaseConfig';
 
 interface GithubContextType {
   githubId: string | null;
@@ -40,6 +42,11 @@ const GithubProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       const additionalUserInfo = getAdditionalUserInfo(result);
       const screenName = additionalUserInfo?.profile?.login as string;
       const photoUrl = additionalUserInfo?.profile?.avatar_url as string;
+      logEvent(analytics, "login", {
+        user_id: githubUser,
+        provider: "GitHub",
+        screen_name: screenName,
+      });
 
       localStorage.setItem('github_Id', (githubUser));
       localStorage.setItem('github_ScreenName', (screenName));

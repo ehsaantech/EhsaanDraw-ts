@@ -11,7 +11,9 @@ import toast from "react-hot-toast";
 import EhsaanDrawScreen from "../Navbar";
 import { database } from "../../../firebaseConfig";
 import { useGithub } from "../../githubContext";
- 
+import { logEvent } from 'firebase/analytics';
+import { analytics } from "../../../firebaseConfig";
+
 interface SceneData {
   id: string;
   scenes1: string; 
@@ -23,7 +25,8 @@ const SketchingPad: React.FC = () => {
   const { githubId } = useGithub();
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [isSharing, setIsSharing] = useState<boolean>(false);
- 
+  const [startTime, setStartTime] = useState<number | null>(null);
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -44,9 +47,32 @@ const SketchingPad: React.FC = () => {
     };
     getData().then();
   }, [githubId, id]);
+
+  useEffect(() => {
+    const enterTime = Date.now();
+    setStartTime(enterTime);
+
+    console.log("User entered sketch pad at:", new Date(enterTime).toISOString());
+
+    return () => {
+      const leaveTime = Date.now();
+      if (startTime) {
+        const durationInMinutes = (leaveTime - startTime) / 60000; // Time in minutes
+        console.log(`User spent ${durationInMinutes.toFixed(2)} minutes on sketch pad.`);
+
+        // Log the event to Firebase Analytics
+        logEvent(analytics, 'Duration on SketchBoard', {
+          duration_minutes: durationInMinutes.toFixed(2), // Rounded to 2 decimal places
+          start_time: new Date(startTime).toISOString(),
+          end_time: new Date(leaveTime).toISOString(),
+        });
+      }
+    };
+  }, [startTime]);
  
   const shareScenesData = async () => {
     setIsSharing(true);
+    logEvent(analytics,"Share Data Analytics")
     try {
       if (!githubId) {
         toast.error("GitHub ID is not available.");
@@ -88,7 +114,7 @@ const SketchingPad: React.FC = () => {
     }
   };
  
-  const updateData = async (elements: any[]): Promise<boolean> => {
+  const updateData = async (elements): Promise<boolean> => {
     if (!id) {
       toast.error("Please select a document or create a new one.");
       return false;
