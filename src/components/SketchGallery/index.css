@@ -147,4 +147,17 @@
   .no-documents-message {
     text-align: center;
   }
+
+  .empty-message-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Or set a specific height if needed */
+  }
+  
+  .empty-message-text {
+    font-size: 1.25rem; /* Adjust size as needed */
+    color: #888; /* Optional for a muted color */
+    text-align: center;
+  }
   

@@ -5,6 +5,7 @@ import { Excalidraw, THEME } from "@excalidraw/excalidraw";
 import { ArrowLeft, Moon, Share2, Sun } from "lucide-react";
 import { ThemeContext } from "../../themeContext";
 import "./index.css"; // Import the CSS file
+import { LoaderCircle } from "lucide-react";
 
 interface EhsaanDrawScreenProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,6 +15,7 @@ interface EhsaanDrawScreenProps {
   shareScenesData?: () => void;
   readOnly?: boolean;
   isSaving?: boolean;
+  isSharing?: boolean;
 }
 
 const EhsaanDrawScreen: React.FC<EhsaanDrawScreenProps> = ({
@@ -22,6 +24,7 @@ const EhsaanDrawScreen: React.FC<EhsaanDrawScreenProps> = ({
   shareScenesData,
   readOnly = false,
   isSaving,
+  isSharing,
 }) => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
@@ -72,21 +75,39 @@ const EhsaanDrawScreen: React.FC<EhsaanDrawScreenProps> = ({
                 }}
               >
                 <button
-                  className={`button ${theme === THEME.LIGHT ? "button-light" : "button-dark"}`}
+                  className={`button ${
+                    theme === THEME.LIGHT ? "button-light" : "button-dark"
+                  }`}
                   onClick={handleBack}
                 >
                   <ArrowLeft />
                 </button>
 
                 <button
-                  className={`button ${theme === THEME.LIGHT ? "button-light" : "button-dark"}`}
+                  className={`button ${
+                    theme === THEME.LIGHT ? "button-light" : "button-dark"
+                  }`}
                   onClick={shareScenesData}
                 >
-                  <Share2 />
+                  {isSharing ? (
+                    <LoaderCircle
+                      size={16}
+                      style={{
+                        animation: "spin 1s linear infinite",
+                        display: "inline-block",
+                      }}
+                    />
+                  ) : (
+                    <Share2 />
+                  )}
                 </button>
 
                 <button
-                  className={`button save-button ${theme === THEME.LIGHT ? "save-button-light" : "save-button-dark"}`}
+                  className={`button save-button ${
+                    theme === THEME.LIGHT
+                      ? "save-button-light"
+                      : "save-button-dark"
+                  }`}
                   disabled={isSaving}
                   onClick={handleSave}
                 >
@@ -94,7 +115,9 @@ const EhsaanDrawScreen: React.FC<EhsaanDrawScreenProps> = ({
                 </button>
 
                 <button
-                  className={`button ${theme === THEME.LIGHT ? "button-light" : "button-dark"}`}
+                  className={`button ${
+                    theme === THEME.LIGHT ? "button-light" : "button-dark"
+                  }`}
                   onClick={toggleTheme}
                 >
                   {theme === THEME.LIGHT ? <Sun /> : <Moon />}

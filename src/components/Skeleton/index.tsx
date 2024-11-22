@@ -1,4 +1,3 @@
-import React from 'react';
 import '../../App.css'
 
 function SkeletonCard() {
@@ -17,7 +16,7 @@ function SkeletonCard() {
 function SkeletonGrid() {
   return (
     <div className="skeleton-grid">
-    {Array.from({ length: 7 }).map((_, index) => (
+    {Array.from({ length: 8 }).map((_, index) => (
       <SkeletonCard key={index} />
     ))}
   </div>

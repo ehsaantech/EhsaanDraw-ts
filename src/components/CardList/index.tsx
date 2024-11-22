@@ -20,7 +20,7 @@ interface CardListProps {
 const CardList: React.FC<CardListProps> = ({ values, handleDelete, handleEdit }) => {
   const { theme } = useContext(ThemeContext);
 
-  const formatTimestamp = (timestamp: any) => {
+  const formatTimestamp = (timestamp) => {
     if (!timestamp) return "Unknown Date";
     const { seconds, nanoseconds } = timestamp;
     const date = new Date(seconds * 1000 + nanoseconds / 1000000);
@@ -79,8 +79,8 @@ const CardList: React.FC<CardListProps> = ({ values, handleDelete, handleEdit })
       </div>
       {values?.length === 0 && (
         <div className="empty-message">
-          <p className="empty-message-text">
-            No document created so far.
+          <p className="empty-message-text flex items-center justify-center">
+            No sketch created so far.
           </p>
         </div>
       )}
